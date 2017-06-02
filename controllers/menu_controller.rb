@@ -68,6 +68,7 @@ class MenuController
   def view_all_entries
     @address_book.entries.each do |entry|
       system "clear"
+      puts "Address Book: #{entry.address_book.name} Entry"
       puts entry.to_s
       entry_submenu(entry)
     end
@@ -156,18 +157,20 @@ class MenuController
   end
 
   def edit_entry(entry)
+    updates = {}
     print "Updated name: "
     name = gets.chomp
+    updates[:name] = name unless name.empty?
     print "Updated phone number: "
     phone_number = gets.chomp
+    updates[:phone_number] = phone_number unless phone_number.empty?
     print "Updated email: "
     email = gets.chomp
-    entry.name = name if !name.empty?
-    entry.phone_number = phone_number if !phone_number.empty?
-    entry.email = email if !email.empty?
+    updates[:email] = email unless email.empty?
+    entry.update_attributes(updates)
     system "clear"
     puts "Updated entry:"
-    puts entry
+    puts Entry.find(entry.id)
   end
 
   def search_submenu(entry)
